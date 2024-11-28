@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Wake Up</string>
+    <string name="sentence_daily_notification">Sentence Daily</string>
+    <string name="alarm_notification">Alarm</string>
+</resources>
