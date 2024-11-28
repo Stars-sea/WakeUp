@@ -22,7 +22,7 @@ serializationKtx = "1.7.3"
 datastore = "1.1.1"
 serializationKtxPlugin = "2.0.21"
 
-retrofit = "2.9.0"
+retrofit = "2.11.0"
 retrofitSerialization = "2.11.0"
 
 [libraries]
