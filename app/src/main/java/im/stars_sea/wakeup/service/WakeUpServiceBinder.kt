@@ -2,17 +2,13 @@ package im.stars_sea.wakeup.service
 
 import android.os.Parcel
 import android.util.Log
-import androidx.datastore.core.DataStore
-import androidx.datastore.core.MultiProcessDataStoreFactory
-import androidx.datastore.dataStoreFile
 import im.stars_sea.wakeup.data.AlarmTime
 import im.stars_sea.wakeup.data.Sentence
-import im.stars_sea.wakeup.data.SentenceConfigs
 import im.stars_sea.wakeup.data.SentenceType
-import im.stars_sea.wakeup.data.WakeUpConfigs
 import im.stars_sea.wakeup.network.randomSentence
 import im.stars_sea.wakeup.serializer.SentenceConfigsSerializer
 import im.stars_sea.wakeup.serializer.WakeUpConfigsSerializer
+import im.stars_sea.wakeup.util.multiProcessDataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -20,14 +16,8 @@ import kotlinx.coroutines.runBlocking
 private const val TAG = "WakeUpService"
 
 class WakeUpServiceBinder(private val service: WakeUpService) : IWakeUpService.Stub() {
-    private val dataStore: DataStore<WakeUpConfigs> = MultiProcessDataStoreFactory.create(
-        serializer = WakeUpConfigsSerializer,
-        produceFile = { service.dataStoreFile("configs.json") }
-    )
-    private val sentenceDataStore: DataStore<SentenceConfigs> = MultiProcessDataStoreFactory.create(
-        serializer = SentenceConfigsSerializer,
-        produceFile = { service.dataStoreFile("sentence.json") }
-    )
+    private val dataStore by service.multiProcessDataStore("configs.json", WakeUpConfigsSerializer)
+    private val sentenceDataStore by service.multiProcessDataStore("sentence.json", SentenceConfigsSerializer)
 
     override fun notifyString(text: String?) {
         service.sentenceNotification.notify(service, content = text ?: "喂, 快醒醒")

@@ -12,10 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import im.stars_sea.wakeup.ui.theme.WakeUpTheme
-import im.stars_sea.wakeup.ui.theme.WakeUpThemeColor
 import im.stars_sea.wakeup.viewmodel.WakeUpViewModel
 
 class AlarmActivity : ComponentActivity() {
+    private val viewModel: WakeUpViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -27,8 +28,6 @@ class AlarmActivity : ComponentActivity() {
 
     @Composable
     private fun RootContent() {
-        val viewModel = MainActivity.viewModel
-
         WakeUpTheme(viewModel.themeColor, viewModel.darkTheme) {
             Scaffold { innerPadding ->
                 Box(modifier = Modifier.padding(innerPadding)) {

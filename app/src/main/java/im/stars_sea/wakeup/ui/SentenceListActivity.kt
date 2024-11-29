@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -19,6 +20,9 @@ import im.stars_sea.wakeup.viewmodel.WakeUpViewModel
 import kotlinx.coroutines.launch
 
 class SentenceListActivity : ComponentActivity() {
+    private val viewModel: WakeUpViewModel by viewModels()
+    private val sentenceViewModel: SentenceViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -27,9 +31,6 @@ class SentenceListActivity : ComponentActivity() {
 
     @Composable
     private fun RootContent() {
-        val viewModel: WakeUpViewModel = MainActivity.viewModel
-        val sentenceViewModel: SentenceViewModel = MainActivity.sentenceViewModel
-
         WakeUpTheme(viewModel.themeColor, viewModel.darkTheme) {
             val scope = rememberCoroutineScope()
 

@@ -23,22 +23,12 @@ import im.stars_sea.wakeup.viewmodel.SentenceViewModel
 import im.stars_sea.wakeup.viewmodel.WakeUpViewModel
 
 class MainActivity : ComponentActivity() {
-    companion object {
-        lateinit var viewModel: WakeUpViewModel
-            private set
-
-        lateinit var sentenceViewModel: SentenceViewModel
-            private set
-    }
-
     private val viewModel: WakeUpViewModel by viewModels()
     private val sentenceViewModel: SentenceViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Companion.viewModel = viewModel
-        Companion.sentenceViewModel = sentenceViewModel
         enableEdgeToEdge()
         setContent { RootContent() }
     }

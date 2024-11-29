@@ -3,12 +3,11 @@ package im.stars_sea.wakeup.viewmodel
 import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.datastore.core.MultiProcessDataStoreFactory
-import androidx.datastore.dataStoreFile
 import androidx.lifecycle.AndroidViewModel
 import im.stars_sea.wakeup.data.Sentence
 import im.stars_sea.wakeup.data.SentenceConfigs
 import im.stars_sea.wakeup.data.SentenceType
+import im.stars_sea.wakeup.util.multiProcessDataStore
 import im.stars_sea.wakeup.network.randomSentence
 import im.stars_sea.wakeup.serializer.SentenceConfigsSerializer
 import kotlinx.collections.immutable.mutate
@@ -16,10 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 
 class SentenceViewModel(application: Application) : AndroidViewModel(application) {
-    private val dataStore = MultiProcessDataStoreFactory.create(
-        serializer = SentenceConfigsSerializer,
-        produceFile = { application.dataStoreFile("sentence.json") }
-    )
+    private val dataStore by multiProcessDataStore("sentence.json", SentenceConfigsSerializer)
 
     private val configs @Composable get() = dataStore.data.collectAsState(initial = SentenceConfigs()).value
 

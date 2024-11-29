@@ -6,11 +6,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.datastore.core.MultiProcessDataStoreFactory
-import androidx.datastore.dataStoreFile
 import androidx.lifecycle.AndroidViewModel
 import im.stars_sea.wakeup.data.AlarmConf
 import im.stars_sea.wakeup.data.WakeUpConfigs
+import im.stars_sea.wakeup.util.multiProcessDataStore
 import im.stars_sea.wakeup.serializer.WakeUpConfigsSerializer
 import im.stars_sea.wakeup.service.IWakeUpService
 import im.stars_sea.wakeup.service.WakeUpServiceConnection
@@ -19,10 +18,7 @@ import im.stars_sea.wakeup.ui.theme.WakeUpThemeColor
 import kotlinx.collections.immutable.mutate
 
 class WakeUpViewModel(application: Application) : AndroidViewModel(application) {
-    private val dataStore = MultiProcessDataStoreFactory.create(
-        serializer = WakeUpConfigsSerializer,
-        produceFile = { application.dataStoreFile("configs.json") }
-    )
+    private val dataStore by multiProcessDataStore("configs.json", WakeUpConfigsSerializer)
 
     private val binder: IWakeUpService? get() = WakeUpServiceConnection.binder
 
