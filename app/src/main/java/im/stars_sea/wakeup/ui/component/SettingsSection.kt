@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun SettingsItem(
+    modifier: Modifier = Modifier,
     title: String,
-    subtitle: String?,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    subtitle: String? = null,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -54,7 +54,7 @@ fun SettingsItem(
 @Preview(showBackground = true)
 @Composable
 private fun SettingsItemPreview() {
-    SettingsItem("主题颜色", "蓝色", { })
+    SettingsItem(title = "主题颜色", subtitle = "蓝色", onClick = { })
 }
 
 
@@ -80,9 +80,13 @@ fun <T> SingleItemsSelector(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = u)
+                Text(text = u, modifier = Modifier.padding(24.dp, 0.dp))
 
-                RadioButton(selected = t == selected, onClick = { onSelectionChanged(t) })
+                RadioButton(
+                    selected = t == selected,
+                    modifier = Modifier.padding(16.dp, 0.dp),
+                    onClick = { onSelectionChanged(t) }
+                )
             }
         }
     }
@@ -91,7 +95,7 @@ fun <T> SingleItemsSelector(
 @Preview(showBackground = true)
 @Composable
 private fun SingleItemsSelectorPreview() {
-    SingleItemsSelector<Int>(
+    SingleItemsSelector(
         title = "Selector",
         selections = mapOf(Pair(0, "Item1"), Pair(1, "Item2")),
         selected = 1,

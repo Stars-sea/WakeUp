@@ -57,7 +57,7 @@ fun HomePage(viewModel: WakeUpViewModel, modifier: Modifier = Modifier) {
         Box {
             AlarmList(
                 Modifier.fillMaxSize(),
-                viewModel.alarms,
+                viewModel.alarms.list,
                 onItemClick = { time -> openDialog(time) },
                 onItemEnabledChanged = { conf: AlarmConf, enabled: Boolean ->
                     scope.launch { viewModel.setAlarmEnabled(conf, enabled) }

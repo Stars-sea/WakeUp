@@ -7,10 +7,12 @@ import androidx.lifecycle.AndroidViewModel
 import im.stars_sea.wakeup.data.Sentence
 import im.stars_sea.wakeup.data.SentenceConfigs
 import im.stars_sea.wakeup.data.SentenceType
-import im.stars_sea.wakeup.util.multiProcessDataStore
 import im.stars_sea.wakeup.network.randomSentence
 import im.stars_sea.wakeup.serializer.SentenceConfigsSerializer
+import im.stars_sea.wakeup.util.PersistentListWrapper
+import im.stars_sea.wakeup.util.multiProcessDataStore
 import kotlinx.collections.immutable.mutate
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 
@@ -20,8 +22,78 @@ class SentenceViewModel(application: Application) : AndroidViewModel(application
     private val configs @Composable get() = dataStore.data.collectAsState(initial = SentenceConfigs()).value
 
     val currentSentence @Composable get() = configs.current
-    val collectedSentences @Composable get() = configs.collected
-    val bannedSentences @Composable get() = configs.banned
+
+    val collected = object : PersistentListWrapper<Sentence> {
+        override suspend fun size(): Int = dataStore.data.first().collected.size
+
+        override suspend fun clear() {
+            dataStore.updateData { configs ->
+                configs.copy(
+                    collected = persistentListOf()
+                )
+            }
+        }
+
+        override val list @Composable get() = configs.collected
+
+        override suspend fun del(item: Sentence): Boolean {
+            var result = false
+            dataStore.updateData { configs ->
+                configs.copy(
+                    collected = configs.collected.mutate { result = it.remove(item) }
+                )
+            }
+            return result
+        }
+
+        override suspend fun add(item: Sentence): Boolean {
+            if (item == Sentence.Empty) return false
+
+            var result = false
+            dataStore.updateData { configs ->
+                configs.copy(
+                    collected = configs.collected.mutate { result = it.add(item) }
+                )
+            }
+            return result
+        }
+    }
+
+    val banned = object : PersistentListWrapper<Sentence> {
+        override suspend fun size(): Int = dataStore.data.first().banned.size
+
+        override suspend fun clear() {
+            dataStore.updateData { configs ->
+                configs.copy(
+                    banned = persistentListOf()
+                )
+            }
+        }
+
+        override val list @Composable get() = configs.banned
+
+        override suspend fun del(item: Sentence): Boolean {
+            var result = false
+            dataStore.updateData { configs ->
+                configs.copy(
+                    banned = configs.banned.mutate { result = it.remove(item) }
+                )
+            }
+            return result
+        }
+
+        override suspend fun add(item: Sentence): Boolean {
+            if (item == Sentence.Empty) return false
+
+            var result = false
+            dataStore.updateData { configs ->
+                configs.copy(
+                    banned = configs.banned.mutate { result = it.add(item) }
+                )
+            }
+            return result
+        }
+    }
 
     private suspend fun getCurrentSentence() = dataStore.data.first().current
 
@@ -35,7 +107,7 @@ class SentenceViewModel(application: Application) : AndroidViewModel(application
     suspend fun updateCurrentSentence(type: SentenceType = SentenceType.Poem): Sentence {
         var sentence = randomSentence(type)
         var counter = 0
-        while (sentence.isBanned() && counter < 4) {
+        while (isBanned(sentence) && counter < 4) {
             delay(2000)
             sentence = randomSentence(type)
             counter++
@@ -50,59 +122,12 @@ class SentenceViewModel(application: Application) : AndroidViewModel(application
         return updateCurrentSentence(type)
     }
 
+    suspend fun collectCurrent() = collected.add(getCurrentSentence())
+    suspend fun cancelCollectCurrent() = collected.del(getCurrentSentence())
 
-    suspend fun collectSentence(sentence: Sentence): Boolean {
-        if (sentence == Sentence.Empty) return false
+    suspend fun banCurrentSentence() = banned.add(getCurrentSentence())
+    suspend fun unbanCurrentSentence() = banned.del(getCurrentSentence())
 
-        var result = false
-        dataStore.updateData { configs ->
-            configs.copy(
-                collected = configs.collected.mutate { result = it.add(sentence) }
-            )
-        }
-        return result
-    }
-
-    suspend fun cancelCollectSentence(sentence: Sentence): Boolean { // Chinglish _(:з)∠)_
-        var result = false
-        dataStore.updateData { configs ->
-            configs.copy(
-                collected = configs.collected.mutate { result = it.remove(sentence) }
-            )
-        }
-        return result
-    }
-
-    suspend fun collectCurrent() = collectSentence(getCurrentSentence())
-    suspend fun cancelCollectCurrent() = cancelCollectSentence(getCurrentSentence())
-
-
-    suspend fun banSentence(sentence: Sentence): Boolean {
-        if (sentence == Sentence.Empty) return false
-
-        var result = false
-        dataStore.updateData { configs ->
-            configs.copy(
-                banned = configs.banned.mutate { result = it.add(sentence) }
-            )
-        }
-        return result
-    }
-
-    suspend fun unbanSentence(sentence: Sentence): Boolean {
-        var result = false
-        dataStore.updateData { configs ->
-            configs.copy(
-                banned = configs.banned.mutate { result = it.remove(sentence) }
-            )
-        }
-        return result
-    }
-
-    suspend fun banCurrentSentence() = banSentence(getCurrentSentence())
-    suspend fun unbanCurrentSentence() = unbanSentence(getCurrentSentence())
-
-
-    suspend fun Sentence.isCollected() = dataStore.data.first().collected.contains(this)
-    suspend fun Sentence.isBanned() = dataStore.data.first().banned.contains(this)
+    suspend fun isCollected(sentence: Sentence) = dataStore.data.first().collected.contains(sentence)
+    suspend fun isBanned(sentence: Sentence) = dataStore.data.first().collected.contains(sentence)
 }

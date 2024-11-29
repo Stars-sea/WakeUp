@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
                 when (viewModel.selectedTab) {
                     WakeUpTabItem.Home -> HomePage(viewModel, Modifier.padding(innerPadding))
                     WakeUpTabItem.Sentences -> SentenceDetailPage(sentenceViewModel, Modifier.padding(innerPadding))
-                    WakeUpTabItem.Settings -> SettingsPage(viewModel, Modifier.padding(innerPadding))
+                    WakeUpTabItem.Settings -> SettingsPage(viewModel, sentenceViewModel, Modifier.padding(innerPadding))
                 }
             }
         }

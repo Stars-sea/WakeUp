@@ -24,9 +24,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import im.stars_sea.wakeup.ui.component.DataStoreManager
 import im.stars_sea.wakeup.ui.component.SettingsItem
 import im.stars_sea.wakeup.ui.component.SingleItemsSelector
 import im.stars_sea.wakeup.ui.theme.WakeUpThemeColor
+import im.stars_sea.wakeup.viewmodel.SentenceViewModel
 import im.stars_sea.wakeup.viewmodel.WakeUpViewModel
 import kotlinx.coroutines.launch
 
@@ -38,7 +40,11 @@ private val darkModeSelections = mapOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsPage(viewModel: WakeUpViewModel, modifier: Modifier = Modifier) {
+fun SettingsPage(
+    viewModel: WakeUpViewModel,
+    sentenceViewModel: SentenceViewModel,
+    modifier: Modifier = Modifier
+) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var selectedSection by remember { mutableIntStateOf(0) }
@@ -59,8 +65,7 @@ fun SettingsPage(viewModel: WakeUpViewModel, modifier: Modifier = Modifier) {
 
     Column(modifier = modifier) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -72,43 +77,59 @@ fun SettingsPage(viewModel: WakeUpViewModel, modifier: Modifier = Modifier) {
         }
 
         SettingsItem(
+            title = "应用数据",
+            onClick = { scope.launch { openSheet(1) } }
+        )
+
+        SettingsItem(
             title = "主题颜色",
             subtitle = viewModel.themeColor.colorName,
-            onClick = { scope.launch { openSheet(1) } }
+            onClick = { scope.launch { openSheet(2) } }
         )
 
         SettingsItem(
             title = "暗色模式",
             subtitle = darkModeSelections[viewModel.darkTheme],
-            onClick = { scope.launch { openSheet(2) } }
+            onClick = { scope.launch { openSheet(3) } }
         )
     }
 
-    if (selectedSection != 0)
-        ModalBottomSheet(
-            sheetState = sheetState,
-            onDismissRequest = { scope.launch { hideSheet() } }
-        ) {
-            when (selectedSection) {
-                1 -> ThemeColorSelector(
-                    selected = viewModel.themeColor,
-                    modifier = Modifier.padding(24.dp, 16.dp),
-                    onSelectionChanged = { scope.launch {
+    if (selectedSection == 0) return
+    ModalBottomSheet(
+        sheetState = sheetState,
+        onDismissRequest = { scope.launch { hideSheet() } }
+    ) {
+        when (selectedSection) {
+            1 -> DataStoreManager(
+                viewModel = viewModel,
+                sentenceViewModel = sentenceViewModel,
+                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 48.dp)
+            )
+            2 -> ThemeColorSelector(
+                selected = viewModel.themeColor,
+                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 48.dp),
+                onSelectionChanged = {
+                    scope.launch {
                         viewModel.setThemeColor(it)
                         hideSheet()
-                    } }
-                )
-                2 -> DarkModeSelector(
-                    selected = viewModel.darkTheme,
-                    modifier = Modifier.padding(24.dp, 16.dp),
-                    onSelectionChanged = { scope.launch {
+                    }
+                }
+            )
+
+            3 -> DarkModeSelector(
+                selected = viewModel.darkTheme,
+                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 48.dp),
+                onSelectionChanged = {
+                    scope.launch {
                         viewModel.setDarkTheme(it)
                         hideSheet()
-                    } },
-                )
-            }
+                    }
+                }
+            )
         }
+    }
 }
+
 
 @Composable
 private fun ThemeColorSelector(
@@ -132,6 +153,7 @@ private fun ThemeColorSelector(
 private fun ThemeColorSelectorPreview() {
     ThemeColorSelector(WakeUpThemeColor.Blue, { })
 }
+
 
 @Composable
 private fun DarkModeSelector(

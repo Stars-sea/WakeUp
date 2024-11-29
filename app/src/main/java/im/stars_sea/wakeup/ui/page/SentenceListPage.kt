@@ -87,10 +87,10 @@ fun SentenceListPage(
 private fun CollectedSentenceList(viewModel: SentenceViewModel, onClick: (Sentence) -> Unit) {
     val scope = rememberCoroutineScope()
     SentenceList(
-        sentences = viewModel.collectedSentences,
+        sentences = viewModel.collected.list,
         icon = { Icon(Icons.Filled.Favorite, contentDescription = "收藏", tint = MaterialTheme.colorScheme.surfaceTint) },
         onClick = onClick,
-        onButtonClick = { scope.launch { viewModel.cancelCollectSentence(it) } }
+        onButtonClick = { scope.launch { viewModel.collected.del(it) } }
     )
 }
 
@@ -98,10 +98,10 @@ private fun CollectedSentenceList(viewModel: SentenceViewModel, onClick: (Senten
 private fun BannedSentenceList(viewModel: SentenceViewModel, onClick: (Sentence) -> Unit) {
     val scope = rememberCoroutineScope()
     SentenceList(
-        sentences = viewModel.bannedSentences,
+        sentences = viewModel.banned.list,
         icon = { Icon(Icons.Filled.Delete, contentDescription = "白名单", tint = MaterialTheme.colorScheme.surfaceTint) },
         onClick = onClick,
-        onButtonClick = { scope.launch { viewModel.unbanSentence(it) } }
+        onButtonClick = { scope.launch { viewModel.collected.del(it) } }
     )
 }
 

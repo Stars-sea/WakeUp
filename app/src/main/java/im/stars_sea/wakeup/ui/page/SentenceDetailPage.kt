@@ -48,8 +48,8 @@ fun SentenceDetailPage(viewModel: SentenceViewModel, modifier: Modifier = Modifi
 
     suspend fun updateSentence(s: Sentence) {
         viewModel.updateCurrentSentence(s)
-        isCollected = viewModel.run { s.isCollected() }
-        isBanned = viewModel.run { s.isBanned() }
+        isCollected = viewModel.isCollected(s)
+        isBanned = viewModel.isBanned(s)
     }
 
     suspend fun onSentenceCollected() {
