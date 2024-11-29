@@ -67,7 +67,7 @@ private fun SentenceItem(
                 Text(
                     text = sentence.author,
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.outline,
+                    color = MaterialTheme.colorScheme.secondary,
                     softWrap = false,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

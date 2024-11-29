@@ -13,11 +13,11 @@ import im.stars_sea.wakeup.ui.theme.green.LightGreenScheme
 import im.stars_sea.wakeup.ui.theme.red.DarkRedScheme
 import im.stars_sea.wakeup.ui.theme.red.LightRedScheme
 
-enum class WakeUpThemeColor {
-    Blue,   // Base: 0xFF87CEEB
-    Green,  // Base: 0xFF7FE997
-    Red,    // Base: 0xFFEC938F
-    Dynamic
+enum class WakeUpThemeColor(val colorName: String) {
+    Blue(colorName = "蓝色"),   // Base: 0xFF87CEEB
+    Green(colorName = "绿色"),  // Base: 0xFF7FE997
+    Red(colorName = "红色"),    // Base: 0xFFEC938F
+    Dynamic(colorName = "跟随壁纸")
 }
 
 @Composable
