@@ -2,7 +2,6 @@ package im.stars_sea.wakeup.data
 
 import android.os.Parcel
 import android.os.Parcelable
-import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.serialization.Required
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -66,16 +65,16 @@ data class Sentence(
         val Empty = Sentence(
             id = -1,
             uuid = "",
-            hitokoto = "Loading...",
+            hitokoto = "",
             type = SentenceType.Other,
-            from = "WakeUp App",
-            fromWho = "Stars_sea",
+            from = "",
+            fromWho = "",
             creator = "Stars_sea",
             creatorUid = -1,
             reviewer = -1,
             commitFrom = "app_builtin",
             createdAt = "",
-            length = 10
+            length = 0
         )
     }
 }

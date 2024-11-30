@@ -11,7 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import im.stars_sea.wakeup.ui.component.WakeUpBottomBar
 import im.stars_sea.wakeup.ui.component.WakeUpTabItem
@@ -45,11 +48,12 @@ class MainActivity : ComponentActivity() {
         val pagerState = rememberPagerState(initialPage = viewModel.selectedTab.ordinal) {
             WakeUpTabItem.entries.count()
         }
-        
+        val snackBarHostState = remember { SnackbarHostState() }
 
         WakeUpTheme(viewModel.themeColor, viewModel.darkTheme) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
+                snackbarHost = { SnackbarHost(snackBarHostState) },
                 bottomBar = {
                     WakeUpBottomBar(viewModel.selectedTab) {
                         viewModel.selectedTab = it
@@ -61,7 +65,7 @@ class MainActivity : ComponentActivity() {
                 }
                 when (viewModel.selectedTab) {
                     WakeUpTabItem.Home -> HomePage(viewModel, Modifier.padding(innerPadding))
-                    WakeUpTabItem.Sentences -> SentenceDetailPage(sentenceViewModel, Modifier.padding(innerPadding))
+                    WakeUpTabItem.Sentences -> SentenceDetailPage(sentenceViewModel, snackBarHostState, Modifier.padding(innerPadding))
                     WakeUpTabItem.Settings -> SettingsPage(viewModel, sentenceViewModel, Modifier.padding(innerPadding))
                 }
             }

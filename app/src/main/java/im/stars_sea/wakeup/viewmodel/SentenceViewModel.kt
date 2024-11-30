@@ -108,11 +108,16 @@ class SentenceViewModel(application: Application) : AndroidViewModel(application
         var counter = 0
         var sentence: Sentence?
         do {
-            sentence = try { randomSentence(type) } catch(_: Throwable) { null }
+            sentence = try {
+                randomSentence(type)
+            } catch(e: Throwable) {
+                if (counter >= 4) throw e
+                null
+            }
+            if (sentence != null) continue
 
             delay(2000)
-            counter++
-        } while ((sentence == null || isBanned(sentence)) && counter < 4)
+        } while ((sentence == null || isBanned(sentence)) && counter++ < 4)
 
         return if (sentence != null)
             updateCurrentSentence(sentence)

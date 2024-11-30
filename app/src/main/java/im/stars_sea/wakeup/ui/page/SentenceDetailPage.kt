@@ -17,6 +17,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,7 +38,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun SentenceDetailPage(viewModel: SentenceViewModel, modifier: Modifier = Modifier) {
+fun SentenceDetailPage(
+    viewModel: SentenceViewModel,
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier
+) {
     var isCollected by remember { mutableStateOf(false) }
     var isBanned by remember { mutableStateOf(false) }
 
@@ -54,8 +59,13 @@ fun SentenceDetailPage(viewModel: SentenceViewModel, modifier: Modifier = Modifi
     suspend fun onSentenceRefreshed() {
         refreshEnabled = false
 
-        updateSentenceStatus(viewModel.updateCurrentSentence())
-        WakeUpServiceConnection.binder!!.refreshSentence()
+        try {
+            updateSentenceStatus(viewModel.updateCurrentSentence())
+            WakeUpServiceConnection.binder!!.refreshSentence()
+        } catch (e: Throwable) {
+            snackbarHostState.showSnackbar(e.message ?: e.javaClass.name)
+            e.printStackTrace()
+        }
 
         delay(2000)
         refreshEnabled = true
