@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
 import im.stars_sea.wakeup.data.Sentence
 import im.stars_sea.wakeup.service.WakeUpServiceConnection
 import im.stars_sea.wakeup.ui.page.SentenceListPage
@@ -31,7 +32,9 @@ class SentenceListActivity : ComponentActivity() {
 
     @Composable
     private fun RootContent() {
-        WakeUpTheme(viewModel.themeColor, viewModel.darkTheme) {
+        val windowInsetsControllerCompat = WindowCompat.getInsetsController(window, window.decorView)
+
+        WakeUpTheme(viewModel.themeColor, viewModel.darkTheme, windowInsetsControllerCompat) {
             val scope = rememberCoroutineScope()
 
             Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

@@ -6,6 +6,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.view.WindowInsetsControllerCompat
 import im.stars_sea.wakeup.ui.theme.blue.DarkBlueScheme
 import im.stars_sea.wakeup.ui.theme.blue.LightBlueScheme
 import im.stars_sea.wakeup.ui.theme.green.DarkGreenScheme
@@ -24,6 +25,7 @@ enum class WakeUpThemeColor(val colorName: String) {
 fun WakeUpTheme(
     themeColor: WakeUpThemeColor,
     darkTheme: Boolean? = null,
+    windowInsetsControllerCompat: WindowInsetsControllerCompat,
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
@@ -35,6 +37,8 @@ fun WakeUpTheme(
         WakeUpThemeColor.Green -> if (isDarkTheme) DarkGreenScheme else LightGreenScheme
         WakeUpThemeColor.Red -> if (isDarkTheme) DarkRedScheme else LightRedScheme
     }
+
+    windowInsetsControllerCompat.isAppearanceLightStatusBars = !isDarkTheme
 
     MaterialTheme(
         colorScheme = colorScheme,

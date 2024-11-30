@@ -22,8 +22,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import im.stars_sea.wakeup.data.Sentence
-import im.stars_sea.wakeup.ui.theme.WakeUpTheme
-import im.stars_sea.wakeup.ui.theme.WakeUpThemeColor
 
 @Composable
 fun SentenceList(
@@ -86,12 +84,10 @@ private fun SentenceItem(
 @Preview(showBackground = true)
 @Composable
 private fun SentenceListPreview() {
-    WakeUpTheme(WakeUpThemeColor.Blue) {
-        SentenceList(
-            sentences = listOf(Sentence.Empty, Sentence.Empty),
-            icon = { Icon(Icons.Outlined.Favorite, contentDescription = "收藏", tint = MaterialTheme.colorScheme.surfaceTint) },
-            onClick = { },
-            onButtonClick = { }
-        )
-    }
+    SentenceList(
+        sentences = listOf(Sentence.Empty, Sentence.Empty),
+        icon = { Icon(Icons.Outlined.Favorite, contentDescription = "收藏", tint = MaterialTheme.colorScheme.surfaceTint) },
+        onClick = { },
+        onButtonClick = { }
+    )
 }

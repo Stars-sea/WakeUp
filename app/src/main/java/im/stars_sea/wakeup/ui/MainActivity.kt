@@ -6,16 +6,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
 import im.stars_sea.wakeup.ui.component.WakeUpBottomBar
 import im.stars_sea.wakeup.ui.component.WakeUpTabItem
 import im.stars_sea.wakeup.ui.page.HomePage
@@ -45,12 +45,10 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun RootContent() {
-        val pagerState = rememberPagerState(initialPage = viewModel.selectedTab.ordinal) {
-            WakeUpTabItem.entries.count()
-        }
         val snackBarHostState = remember { SnackbarHostState() }
+        val windowInsetsControllerCompat = WindowCompat.getInsetsController(window, window.decorView)
 
-        WakeUpTheme(viewModel.themeColor, viewModel.darkTheme) {
+        WakeUpTheme(viewModel.themeColor, viewModel.darkTheme, windowInsetsControllerCompat) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 snackbarHost = { SnackbarHost(snackBarHostState) },
@@ -60,13 +58,19 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             ) { innerPadding ->
-                HorizontalPager(pagerState) {
+                Box(modifier = Modifier.padding(innerPadding)) {
+                    when (viewModel.selectedTab) {
+                        WakeUpTabItem.Home -> HomePage(viewModel)
+                        WakeUpTabItem.Sentences -> SentenceDetailPage(
+                            sentenceViewModel,
+                            snackBarHostState
+                        )
 
-                }
-                when (viewModel.selectedTab) {
-                    WakeUpTabItem.Home -> HomePage(viewModel, Modifier.padding(innerPadding))
-                    WakeUpTabItem.Sentences -> SentenceDetailPage(sentenceViewModel, snackBarHostState, Modifier.padding(innerPadding))
-                    WakeUpTabItem.Settings -> SettingsPage(viewModel, sentenceViewModel, Modifier.padding(innerPadding))
+                        WakeUpTabItem.Settings -> SettingsPage(
+                            viewModel,
+                            sentenceViewModel
+                        )
+                    }
                 }
             }
         }

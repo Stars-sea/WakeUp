@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.core.view.WindowCompat
 import im.stars_sea.wakeup.ui.theme.WakeUpTheme
 import im.stars_sea.wakeup.viewmodel.WakeUpViewModel
 
@@ -28,7 +29,9 @@ class AlarmActivity : ComponentActivity() {
 
     @Composable
     private fun RootContent() {
-        WakeUpTheme(viewModel.themeColor, viewModel.darkTheme) {
+        val windowInsetsControllerCompat = WindowCompat.getInsetsController(window, window.decorView)
+
+        WakeUpTheme(viewModel.themeColor, viewModel.darkTheme, windowInsetsControllerCompat) {
             Scaffold { innerPadding ->
                 Box(modifier = Modifier.padding(innerPadding)) {
                     Text("123")
