@@ -105,15 +105,18 @@ class SentenceViewModel(application: Application) : AndroidViewModel(application
     }
 
     suspend fun updateCurrentSentence(type: SentenceType = SentenceType.Poem): Sentence {
-        var sentence = randomSentence(type)
         var counter = 0
-        while (isBanned(sentence) && counter < 4) {
-            delay(2000)
-            sentence = randomSentence(type)
-            counter++
-        }
+        var sentence: Sentence?
+        do {
+            sentence = try { randomSentence(type) } catch(_: Throwable) { null }
 
-        return updateCurrentSentence(sentence)
+            delay(2000)
+            counter++
+        } while ((sentence == null || isBanned(sentence)) && counter < 4)
+
+        return if (sentence != null)
+            updateCurrentSentence(sentence)
+        else Sentence.Empty
     }
 
     suspend fun getOrCreateSentence(type: SentenceType = SentenceType.Poem): Sentence {

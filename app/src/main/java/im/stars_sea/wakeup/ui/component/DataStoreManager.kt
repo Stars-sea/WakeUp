@@ -14,6 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import im.stars_sea.wakeup.ui.theme.WakeUpThemeColor
@@ -34,7 +35,9 @@ fun DataStoreManager(
             text = "应用数据",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.align(Alignment.CenterHorizontally).padding(0.dp, 0.dp, 0.dp, 16.dp)
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(0.dp, 0.dp, 0.dp, 16.dp)
         )
 
         SettingsItem(
@@ -92,4 +95,10 @@ private fun SettingsItem(
     TextButton(onClick = onClick) {
         Text(text = buttonText)
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SettingsItemPreview() {
+    SettingsItem("好句收藏", "10 条", "清除") { }
 }

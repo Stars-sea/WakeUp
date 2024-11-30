@@ -48,9 +48,14 @@ class WakeUpServiceBinder(private val service: WakeUpService) : IWakeUpService.S
     }
 
     override fun init() {
-        runBlocking {
-            sentenceDataStore.updateData { configs ->
-                configs.copy(current = randomSentence(SentenceType.Poem))
+        runBlocking(Dispatchers.IO) {
+            try {
+                sentenceDataStore.updateData { configs ->
+                    configs.copy(current = randomSentence(SentenceType.Poem))
+                }
+            } catch (e: Exception) {
+                Log.w(TAG, e)
+                e.printStackTrace()
             }
         }
 
@@ -61,7 +66,7 @@ class WakeUpServiceBinder(private val service: WakeUpService) : IWakeUpService.S
     override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
         try {
             return super.onTransact(code, data, reply, flags)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Log.e(TAG, "Exception caught", e)
             throw e
         }

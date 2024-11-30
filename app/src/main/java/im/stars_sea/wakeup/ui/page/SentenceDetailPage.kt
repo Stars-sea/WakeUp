@@ -46,10 +46,19 @@ fun SentenceDetailPage(viewModel: SentenceViewModel, modifier: Modifier = Modifi
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    suspend fun updateSentence(s: Sentence) {
-        viewModel.updateCurrentSentence(s)
+    suspend fun updateSentenceStatus(s: Sentence) {
         isCollected = viewModel.isCollected(s)
         isBanned = viewModel.isBanned(s)
+    }
+
+    suspend fun onSentenceRefreshed() {
+        refreshEnabled = false
+
+        updateSentenceStatus(viewModel.updateCurrentSentence())
+        WakeUpServiceConnection.binder!!.refreshSentence()
+
+        delay(2000)
+        refreshEnabled = true
     }
 
     suspend fun onSentenceCollected() {
@@ -58,16 +67,6 @@ fun SentenceDetailPage(viewModel: SentenceViewModel, modifier: Modifier = Modifi
         else viewModel.collectCurrent()
 
         if (result) isCollected = !isCollected
-    }
-
-    suspend fun onSentenceRefreshed() {
-        refreshEnabled = false
-
-        updateSentence(viewModel.updateCurrentSentence())
-        WakeUpServiceConnection.binder!!.refreshSentence()
-
-        delay(2000)
-        refreshEnabled = true
     }
 
     suspend fun onSentenceBanned() {
@@ -86,7 +85,7 @@ fun SentenceDetailPage(viewModel: SentenceViewModel, modifier: Modifier = Modifi
     }
 
     LaunchedEffect(viewModel.currentSentence) {
-        updateSentence(viewModel.getOrCreateSentence())
+        updateSentenceStatus(viewModel.getOrCreateSentence())
         delay(2000)
         refreshEnabled = true
     }
