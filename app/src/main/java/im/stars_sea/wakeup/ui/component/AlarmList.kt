@@ -11,21 +11,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import im.stars_sea.wakeup.data.AlarmConf
 import im.stars_sea.wakeup.data.AlarmTime
+import im.stars_sea.wakeup.ui.theme.WakeUpThemePreview
 
 @Composable
 fun AlarmList(
@@ -57,12 +53,11 @@ fun AlarmItem(
     onEnabledChanged: (AlarmConf, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val time by remember { mutableStateOf(alarm.time.toString()) }
-    var hint by remember { mutableStateOf("") }
-    if (alarm.enabled) {
+    val time = alarm.time.toString()
+    val hint = if (alarm.enabled) {
         val delta = alarm.time - AlarmTime()
-        hint = "${delta.toHintString()}后响起"
-    }
+        "${delta.toHintString()}后响起"
+    } else ""
 
     ElevatedCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -72,13 +67,17 @@ fun AlarmItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp, 8.dp),
+                .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                Text(text = time, fontSize = 36.sp)
-                Text(text = hint, fontSize = 14.sp, color = Color.Gray)
+                Text(text = time, style = MaterialTheme.typography.headlineLarge)
+                Text(
+                    text = hint,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
 
             Switch(
@@ -92,7 +91,7 @@ fun AlarmItem(
 
 @Preview
 @Composable
-fun AlarmItemPreview() {
+private fun AlarmItemPreview() = WakeUpThemePreview {
     AlarmItem(
         AlarmConf(AlarmTime()),
         onClick = { },

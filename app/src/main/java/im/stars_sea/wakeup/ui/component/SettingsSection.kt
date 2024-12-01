@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import im.stars_sea.wakeup.ui.theme.WakeUpThemePreview
 
 @Composable
 fun SettingsItem(
@@ -36,7 +36,7 @@ fun SettingsItem(
     ) {
         Text(
             text = title,
-            fontSize = 18.sp,
+            style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(24.dp, 16.dp)
         )
@@ -45,7 +45,11 @@ fun SettingsItem(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = subtitle ?: "", color = MaterialTheme.colorScheme.secondary)
+            Text(
+                text = subtitle ?: "",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.secondary
+            )
             Icon(Icons.AutoMirrored.Outlined.KeyboardArrowRight, contentDescription = "")
         }
     }
@@ -53,7 +57,7 @@ fun SettingsItem(
 
 @Preview(showBackground = true)
 @Composable
-private fun SettingsItemPreview() {
+private fun SettingsItemPreview() = WakeUpThemePreview {
     SettingsItem(title = "主题颜色", subtitle = "蓝色", onClick = { })
 }
 
@@ -69,9 +73,10 @@ fun <T> SingleItemsSelector(
     Column(modifier.fillMaxWidth()) {
         Text(
             text = title,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(0.dp, 0.dp, 0.dp, 16.dp).align(Alignment.CenterHorizontally)
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier
+                .padding(0.dp, 0.dp, 0.dp, 16.dp)
+                .align(Alignment.CenterHorizontally)
         )
 
         selections.forEach { (t, u) ->
@@ -80,7 +85,11 @@ fun <T> SingleItemsSelector(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = u, modifier = Modifier.padding(24.dp, 0.dp))
+                Text(
+                    text = u,
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(24.dp, 0.dp)
+                )
 
                 RadioButton(
                     selected = t == selected,
@@ -94,7 +103,7 @@ fun <T> SingleItemsSelector(
 
 @Preview(showBackground = true)
 @Composable
-private fun SingleItemsSelectorPreview() {
+private fun SingleItemsSelectorPreview() = WakeUpThemePreview {
     SingleItemsSelector(
         title = "Selector",
         selections = mapOf(Pair(0, "Item1"), Pair(1, "Item2")),

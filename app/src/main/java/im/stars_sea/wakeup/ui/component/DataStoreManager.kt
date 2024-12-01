@@ -3,6 +3,7 @@ package im.stars_sea.wakeup.ui.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -13,11 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import im.stars_sea.wakeup.ui.theme.WakeUpThemeColor
+import im.stars_sea.wakeup.ui.theme.WakeUpThemePreview
 import im.stars_sea.wakeup.viewmodel.SentenceViewModel
 import im.stars_sea.wakeup.viewmodel.WakeUpViewModel
 import kotlinx.coroutines.launch
@@ -33,8 +33,7 @@ fun DataStoreManager(
     Column(modifier.fillMaxWidth().padding(24.dp, 0.dp)) {
         Text(
             text = "应用数据",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.titleMedium, // 18
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(0.dp, 0.dp, 0.dp, 16.dp)
@@ -83,13 +82,18 @@ private fun SettingsItem(
     horizontalArrangement = Arrangement.SpaceBetween
 ) {
     Row(
-        modifier = Modifier.width(120.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = text, fontSize = 18.sp)
+        Text(text = text, style = MaterialTheme.typography.titleMedium)
 
-        Text(text = detailText, fontSize = 14.sp, color = MaterialTheme.colorScheme.secondary)
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Text(
+            text = detailText,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.secondary
+        )
     }
 
     TextButton(onClick = onClick) {
@@ -99,6 +103,6 @@ private fun SettingsItem(
 
 @Preview(showBackground = true)
 @Composable
-private fun SettingsItemPreview() {
+private fun SettingsItemPreview() = WakeUpThemePreview {
     SettingsItem("好句收藏", "10 条", "清除") { }
 }

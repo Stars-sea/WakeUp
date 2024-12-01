@@ -46,3 +46,10 @@ fun WakeUpTheme(
         content = content
     )
 }
+
+@Composable
+fun WakeUpThemePreview(content: @Composable () -> Unit) = MaterialTheme(
+    colorScheme = LightBlueScheme,
+    typography = Typography,
+    content = content
+)

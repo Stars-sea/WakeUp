@@ -13,6 +13,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import im.stars_sea.wakeup.ui.theme.WakeUpThemePreview
 
 enum class WakeUpTabItem {
     Home, Sentences, Settings
@@ -61,6 +62,6 @@ fun WakeUpBottomBar(selectedTab: WakeUpTabItem, onClick: (WakeUpTabItem) -> Unit
 
 @Preview(showBackground = true)
 @Composable
-fun WakeUpBottomBarPreview() {
+private fun WakeUpBottomBarPreview() = WakeUpThemePreview {
     WakeUpBottomBar(WakeUpTabItem.Home) { }
 }

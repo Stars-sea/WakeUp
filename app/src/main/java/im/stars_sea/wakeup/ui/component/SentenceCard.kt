@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 import im.stars_sea.wakeup.data.Sentence
 import im.stars_sea.wakeup.data.SentenceType
 import im.stars_sea.wakeup.ui.theme.FangSongFontFamily
+import im.stars_sea.wakeup.ui.theme.WakeUpThemePreview
 
 @Composable
 fun SentenceCard(
@@ -68,7 +69,7 @@ fun SentenceCard(
 
 @Preview(showBackground = true)
 @Composable
-fun SentenceCardPreview1() {
+private fun SentenceCardPreview1() = WakeUpThemePreview {
     val sentence = Sentence(
         id = 5590,
         uuid = "3f7ffa61-e42f-4bdb-949d-830680c19eae",
@@ -88,7 +89,7 @@ fun SentenceCardPreview1() {
 
 @Preview(showBackground = true)
 @Composable
-fun SentenceCardPreview2() {
+private fun SentenceCardPreview2() = WakeUpThemePreview {
     val sentence = Sentence(
         id = 4689,
         uuid = "739ed604-6182-4c36-afb9-39f08128c733",

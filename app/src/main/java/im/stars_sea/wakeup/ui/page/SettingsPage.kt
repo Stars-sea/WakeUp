@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -23,11 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import im.stars_sea.wakeup.ui.component.DataStoreManager
 import im.stars_sea.wakeup.ui.component.SettingsItem
 import im.stars_sea.wakeup.ui.component.SingleItemsSelector
 import im.stars_sea.wakeup.ui.theme.WakeUpThemeColor
+import im.stars_sea.wakeup.ui.theme.WakeUpThemePreview
 import im.stars_sea.wakeup.viewmodel.SentenceViewModel
 import im.stars_sea.wakeup.viewmodel.WakeUpViewModel
 import kotlinx.coroutines.launch
@@ -69,7 +70,11 @@ fun SettingsPage(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "设置", fontSize = 28.sp, modifier = Modifier.padding(24.dp))
+            Text(
+                text = "设置",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(24.dp)
+            )
 
             IconButton(onClick = { }, modifier = Modifier.padding(16.dp, 0.dp)) { // TODO
                 Icon(Icons.Outlined.Info, contentDescription = "关于")
@@ -150,7 +155,7 @@ private fun ThemeColorSelector(
 
 @Preview(showBackground = true)
 @Composable
-private fun ThemeColorSelectorPreview() {
+private fun ThemeColorSelectorPreview() = WakeUpThemePreview {
     ThemeColorSelector(WakeUpThemeColor.Blue, { })
 }
 
@@ -170,6 +175,6 @@ private fun DarkModeSelector(
 
 @Preview(showBackground = true)
 @Composable
-private fun DarkModeSelectorPreview() {
+private fun DarkModeSelectorPreview() = WakeUpThemePreview {
     DarkModeSelector(null, { })
 }

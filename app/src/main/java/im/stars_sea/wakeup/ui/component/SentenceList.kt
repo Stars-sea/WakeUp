@@ -16,12 +16,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import im.stars_sea.wakeup.data.Sentence
+import im.stars_sea.wakeup.ui.theme.WakeUpThemePreview
 
 @Composable
 fun SentenceList(
@@ -53,18 +54,21 @@ private fun SentenceItem(
     modifier: Modifier = Modifier
 ) {
     ElevatedCard(modifier = modifier.fillMaxWidth(), onClick = onClick) {
-        Row(modifier = Modifier.padding(16.dp)) {
+        Row(
+            modifier = Modifier.padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = sentence.hitokoto,
-                    fontSize = 18.sp,
+                    style = MaterialTheme.typography.bodyLarge,
                     softWrap = false,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = sentence.author,
-                    fontSize = 12.sp,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.secondary,
                     softWrap = false,
                     maxLines = 1,
@@ -83,7 +87,7 @@ private fun SentenceItem(
 
 @Preview(showBackground = true)
 @Composable
-private fun SentenceListPreview() {
+private fun SentenceListPreview() = WakeUpThemePreview {
     SentenceList(
         sentences = listOf(Sentence.Empty, Sentence.Empty),
         icon = { Icon(Icons.Outlined.Favorite, contentDescription = "收藏", tint = MaterialTheme.colorScheme.surfaceTint) },

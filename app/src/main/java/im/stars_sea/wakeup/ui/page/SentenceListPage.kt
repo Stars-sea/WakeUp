@@ -29,7 +29,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import im.stars_sea.wakeup.data.Sentence
 import im.stars_sea.wakeup.ui.component.SentenceList
 import im.stars_sea.wakeup.viewmodel.SentenceViewModel
@@ -51,7 +50,11 @@ fun SentenceListPage(
                 Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "返回")
             }
 
-            Text(text = "好句", fontSize = 18.sp, modifier = Modifier.align(Alignment.Center))
+            Text(
+                text = "好句",
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
 
         PrimaryTabRow(selectedTabIndex = selectedTabIndex) {
